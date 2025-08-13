@@ -1,0 +1,27 @@
+.homepage-container {
+  min-height: calc(100vh - 96px);
+
+  .banner-container {
+    text-align: center;
+    padding: 24px 0;
+
+    img {
+      border-radius: 8px;
+    }
+  }
+
+  .list-products-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+
+  .more-products {
+    text-align: center;
+    padding: 24px;
+
+    .btn-more-products {
+      width: 50%;
+    }
+  }
+}

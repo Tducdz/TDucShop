@@ -1,0 +1,116 @@
+.product-detail-container {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 32px;
+  padding-bottom: 32px;
+
+  .left-side {
+    width: 40%;
+
+    .product-img {
+      img {
+        display: block;
+        margin: 0 auto;
+      }
+
+      h3 {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 12px;
+      }
+
+      .price {
+        display: flex;
+        font-size: 20px;
+        font-weight: 600;
+        justify-content: center;
+        gap: 12px;
+        color: #d70018;
+
+        .old-price {
+          text-decoration: line-through;
+          right: 0;
+          font-size: 14px;
+          color: #000;
+        }
+      }
+
+      .action {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+      }
+    }
+  }
+
+  .right-side {
+    width: 40%;
+
+    .functions {
+      .product-information {
+        border-radius: 8px;
+        border: 2px solid orange;
+
+        h2 {
+          color: red;
+          font-size: 16px;
+          font-weight: 600;
+          text-align: center;
+          line-height: 28px;
+        }
+
+        .information-form {
+          padding: 0px 20px 10px 20px;
+          line-height: 30px;
+
+          ul {
+            padding-left: 20px;
+
+            li {
+              margin-bottom: 6px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.comment-container {
+  padding-bottom: 32px;
+
+  #comment {
+    margin-bottom: 12px;
+  }
+
+  .btn-submit {
+    float: right;
+  }
+
+  .list-comments {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: rgb(153, 255, 255);
+    border-radius: 12px;
+    margin-top: 28px;
+    padding: 20px;
+
+    .card-comment {
+      .comment-name {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .comment-time {
+        margin-left: 12px;
+        font-size: 14px;
+      }
+      .comment-text {
+        margin-left: 12px;
+        font-size: 16px;
+      }
+    }
+  }
+}
