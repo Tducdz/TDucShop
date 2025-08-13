@@ -1,5 +1,6 @@
 import { Comment } from "@/app/product/[id]/page";
 import { IoTimeOutline } from "react-icons/io5";
+import { CgDetailsMore } from "react-icons/cg";
 
 const CommentCard = ({ comment }: { comment: Comment }) => {
   return (
@@ -17,7 +18,9 @@ const CommentCard = ({ comment }: { comment: Comment }) => {
           })}
         </i>
       </span>
-      <p className="comment-text">{comment.comment}</p>
+      <p className="comment-text">
+        <CgDetailsMore /> {comment.comment}
+      </p>
     </div>
   );
 };

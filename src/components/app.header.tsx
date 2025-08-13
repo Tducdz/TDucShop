@@ -7,58 +7,123 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
+import LoginForm from "@/components/auth/login";
 import "../styles/header.scss";
+import { useEffect, useState } from "react";
+import SignupForm from "./auth/signup";
+import { getToken, getUser } from "@/utils/auth";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
 
 const AppHeader = () => {
+  const [showModalLogin, setShowModalLogin] = useState<boolean>(false);
+  const [showModalSignup, setShowModalSignup] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  const updateAuth = () => {
+    setToken(getToken());
+    setUser(getUser());
+  };
+
+  useEffect(() => {
+    updateAuth();
+    window.addEventListener("storage", updateAuth);
+    window.addEventListener("authChange", updateAuth);
+
+    return () => {
+      window.removeEventListener("storage", updateAuth);
+      window.removeEventListener("authChange", updateAuth);
+    };
+  }, []);
+
+  const isLoggedIn = () => {
+    return Boolean(token);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
+    setUser(null);
+  };
+
   return (
-    <div className="header-container">
-      <Navbar expand="lg" className="bg-body-tertiary">
-        <Container>
-          <Link href="/" className="navbar-brand">
-            TDucShop
-          </Link>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Form className="d-flex mx-auto">
-              <Form.Control
-                type="search"
-                placeholder="Tìm kiếm"
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-danger">
-                <CiSearch style={{ marginBottom: "3px" }} />
-              </Button>
-            </Form>
-            <Nav className="ms-auto">
-              <Link href="/" className="nav-link">
-                Tra cứu đơn hàng
-              </Link>
-              <Link href="/" className="nav-link">
-                Giỏ hàng
-              </Link>
-              <div className="not-logged-in">
-                <Button variant="outline-dark">
-                  <Link href="/login">Đăng nhập</Link>
+    <>
+      <div className="header-container">
+        <Navbar expand="lg" className="bg-body-tertiary">
+          <Container>
+            <Link href="/" className="navbar-brand">
+              TDucShop
+            </Link>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Form className="d-flex mx-auto">
+                <Form.Control
+                  type="search"
+                  placeholder="Tìm kiếm"
+                  className="me-2"
+                  aria-label="Search"
+                />
+                <Button variant="outline-danger">
+                  <CiSearch style={{ marginBottom: "3px" }} />
                 </Button>
-                <Button variant="outline-secondary">
-                  <Link href="/signup">Đăng Ký </Link>
-                </Button>
-              </div>
-              {/* <NavDropdown title="Tên người dùng" id="basic-nav-dropdown">
-                <Link href="/" className="dropdown-item">
-                  Tài khoản
+              </Form>
+              <Nav className="ms-auto">
+                <Link href="/" className="nav-link">
+                  Tra cứu đơn hàng
                 </Link>
-                <NavDropdown.Divider />
-                <Link href="/" className="dropdown-item">
-                  Đăng xuất
+                <Link href="/" className="nav-link">
+                  Giỏ hàng
                 </Link>
-              </NavDropdown> */}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </div>
+                {isLoggedIn() ? (
+                  <NavDropdown title={user?.name} id="basic-nav-dropdown">
+                    <Link href="/" className="dropdown-item">
+                      Tài khoản
+                    </Link>
+                    <NavDropdown.Divider />
+                    <span
+                      className="dropdown-item btn"
+                      onClick={() => handleLogout()}
+                    >
+                      Đăng xuất
+                    </span>
+                  </NavDropdown>
+                ) : (
+                  <div className="not-logged-in">
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => setShowModalLogin(true)}
+                    >
+                      Đăng nhập
+                    </Button>
+                    <Button
+                      variant="outline-dark"
+                      onClick={() => setShowModalSignup(true)}
+                    >
+                      Đăng ký
+                    </Button>
+                  </div>
+                )}
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      </div>
+      <LoginForm
+        showModalLogin={showModalLogin}
+        handleClose={() => setShowModalLogin(false)}
+      />
+      <SignupForm
+        showModalSignup={showModalSignup}
+        handleClose={() => setShowModalSignup(false)}
+      />
+    </>
   );
 };
 
