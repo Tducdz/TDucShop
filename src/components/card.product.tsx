@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import "../styles/card.product.scss";
 
-type CardProductProps = {
+interface CardProductProps {
   product: Product;
-};
+}
 
 const CardProduct = ({ product }: CardProductProps) => {
   const formatPrice = (price: number | string) => {
@@ -37,4 +37,3 @@ const CardProduct = ({ product }: CardProductProps) => {
   );
 };
 export default CardProduct;
-// /img/ad1.jpg

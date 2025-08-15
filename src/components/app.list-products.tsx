@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import CardProduct from "./card.product";
 import Button from "react-bootstrap/Button";
 
-export type Product = {
+export interface Product {
   id: number;
   category_id: number;
   name: string;
@@ -22,7 +22,7 @@ export type Product = {
   water_resistant: boolean;
   stock: number;
   image_url: string;
-};
+}
 
 const ListProducts = () => {
   const [listProduct, setListProduct] = useState<Product[]>([]);

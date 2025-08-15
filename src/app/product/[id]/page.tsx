@@ -4,10 +4,13 @@ import React from "react";
 import Image from "next/image";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import "@/styles/product.detail.scss";
 import CommentCard from "@/components/card.comment";
+import { getToken, getUser } from "@/utils/auth";
+import { toast } from "react-toastify";
+import { redirect } from "next/navigation";
+import "@/styles/product.detail.scss";
 
-type Product = {
+interface Product {
   id: number;
   category_id: number;
   name: string;
@@ -25,7 +28,14 @@ type Product = {
   water_resistant: boolean;
   stock: number;
   image_url: string;
-};
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
 
 export type Comment = {
   id: number;
@@ -58,8 +68,23 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
     stock: 0,
     image_url: "",
   });
-
   const [comments, setComments] = useState<Comment[]>();
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  const updateAuth = () => {
+    setToken(getToken());
+    setUser(getUser());
+  };
+
+  useEffect(() => {
+    updateAuth();
+    window.addEventListener("authChange", updateAuth);
+
+    return () => {
+      window.removeEventListener("authChange", updateAuth);
+    };
+  }, []);
 
   const fetchProductDetail = async () => {
     const res = await fetch(`http://localhost:8080/product/${id}`);
@@ -83,6 +108,29 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
     return priceInt.toLocaleString("vi-VN") + "₫";
   };
 
+  const handleAddProduct = async () => {
+    const res = await fetch(`http://localhost:8080/cart`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user_id: user?.id,
+        product_id: id,
+        quantity: 1,
+      }),
+    });
+    if (res.ok) {
+      toast.success("Đã thêm vào giỏ hàng");
+    }
+  };
+
+  const handleBuyNow = async () => {
+    await handleAddProduct();
+    redirect("/cart");
+  };
+
   return (
     <>
       <div className="product-detail-container container">
@@ -103,10 +151,10 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
               <p className="old-price">{formatPrice(product.price_old)}</p>
             </div>
             <div className="action">
-              <Button size="lg" variant="secondary">
+              <Button size="lg" variant="secondary" onClick={handleAddProduct}>
                 Thêm vào giỏ hàng
               </Button>
-              <Button size="lg" variant="danger">
+              <Button size="lg" variant="danger" onClick={handleBuyNow}>
                 Mua ngay
               </Button>
             </div>

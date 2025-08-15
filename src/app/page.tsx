@@ -1,7 +1,7 @@
 import AppBanner from "@/components/app.banner";
 import ListProducts from "@/components/app.list-products";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <div className="homepage-container">
@@ -10,4 +10,6 @@ export default function Home() {
       </div>
     </>
   );
-}
+};
+
+export default Home;

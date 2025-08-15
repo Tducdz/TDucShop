@@ -33,11 +33,9 @@ const AppHeader = () => {
 
   useEffect(() => {
     updateAuth();
-    window.addEventListener("storage", updateAuth);
     window.addEventListener("authChange", updateAuth);
 
     return () => {
-      window.removeEventListener("storage", updateAuth);
       window.removeEventListener("authChange", updateAuth);
     };
   }, []);
@@ -51,6 +49,7 @@ const AppHeader = () => {
     localStorage.removeItem("user");
     setToken(null);
     setUser(null);
+    window.dispatchEvent(new Event("authChange"));
   };
 
   return (
@@ -78,7 +77,7 @@ const AppHeader = () => {
                 <Link href="/" className="nav-link">
                   Tra cứu đơn hàng
                 </Link>
-                <Link href="/" className="nav-link">
+                <Link href="/cart" className="nav-link">
                   Giỏ hàng
                 </Link>
                 {isLoggedIn() ? (
