@@ -106,7 +106,7 @@ const SignupForm = ({ showModalSignup, handleClose }: SignupFormProps) => {
               <Button variant="dark" type="submit">
                 Đăng ký
               </Button>
-              <Button variant="secondary" onClick={handleCloseBtn}>
+              <Button variant="outline-dark" onClick={handleCloseBtn}>
                 Hủy
               </Button>
             </div>

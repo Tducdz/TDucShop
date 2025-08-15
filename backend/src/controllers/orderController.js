@@ -31,9 +31,9 @@ const createOrder = (req, res) => {
 
     // Create order
     const orderSQL = `
-      INSERT INTO Orders (user_id, order_date, total_price, payment_method, shipping_address, payment_status, order_status)
-      VALUES (?, CURDATE(), ?, ?, ?, 'Chưa thanh toán', 'Chờ xác nhận')
-    `;
+  INSERT INTO Orders (user_id, order_date, total_price, payment_method, shipping_address, payment_status, order_status)
+  VALUES (?, CURDATE(), ?, ?, ?, 'pending', 'pending')
+`;
 
     db.query(
       orderSQL,

@@ -79,7 +79,7 @@ const LoginForm = ({ showModalLogin, handleClose }: LoginFormProps) => {
               <Button variant="dark" type="submit">
                 Đăng nhập
               </Button>
-              <Button variant="secondary" onClick={handleCloseBtn}>
+              <Button variant="outline-dark" onClick={handleCloseBtn}>
                 Hủy
               </Button>
             </div>

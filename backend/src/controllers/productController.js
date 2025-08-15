@@ -135,7 +135,7 @@ const getProductById = (req, res) => {
 const searchProducts = (req, res) => {
   const { keyword } = req.query;
   const page = parseInt(req.query.page) || 1;
-  const limit = 20;
+  const limit = 100;
   const offset = (page - 1) * limit;
 
   if (!keyword) {

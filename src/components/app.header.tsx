@@ -8,10 +8,11 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
 import LoginForm from "@/components/auth/login";
-import "../styles/header.scss";
 import { useEffect, useState } from "react";
 import SignupForm from "./auth/signup";
 import { getToken, getUser } from "@/utils/auth";
+import { useRouter } from "next/navigation";
+import "../styles/header.scss";
 
 interface User {
   id: number;
@@ -25,6 +26,16 @@ const AppHeader = () => {
   const [showModalSignup, setShowModalSignup] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+
+  const router = useRouter();
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchText.trim()) return;
+
+    router.push(`/?q=${encodeURIComponent(searchText)}`);
+  };
 
   const updateAuth = () => {
     setToken(getToken());
@@ -62,14 +73,16 @@ const AppHeader = () => {
             </Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Form className="d-flex mx-auto">
+              <Form className="d-flex mx-auto" onSubmit={handleSearch}>
                 <Form.Control
                   type="search"
                   placeholder="Tìm kiếm"
                   className="me-2"
                   aria-label="Search"
+                  value={searchText || ""}
+                  onChange={(e) => setSearchText(e.target.value)}
                 />
-                <Button variant="outline-danger">
+                <Button variant="outline-danger" type="submit">
                   <CiSearch style={{ marginBottom: "3px" }} />
                 </Button>
               </Form>

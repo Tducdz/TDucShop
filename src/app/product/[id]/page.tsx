@@ -108,27 +108,33 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
     return priceInt.toLocaleString("vi-VN") + "₫";
   };
 
-  const handleAddProduct = async () => {
-    const res = await fetch(`http://localhost:8080/cart`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        user_id: user?.id,
-        product_id: id,
-        quantity: 1,
-      }),
-    });
-    if (res.ok) {
-      toast.success("Đã thêm vào giỏ hàng");
+  const handleAddProductToCart = async () => {
+    if (user && token) {
+      const res = await fetch(`http://localhost:8080/cart`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user_id: user?.id,
+          product_id: id,
+          quantity: 1,
+        }),
+      });
+      if (res.ok) {
+        toast.success("Đã thêm vào giỏ hàng");
+      }
+    } else {
+      toast.error("Bạn hãy đăng nhập!");
     }
   };
 
   const handleBuyNow = async () => {
-    await handleAddProduct();
-    redirect("/cart");
+    await handleAddProductToCart();
+    if (user && token) {
+      redirect("/cart");
+    }
   };
 
   return (
@@ -151,7 +157,11 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
               <p className="old-price">{formatPrice(product.price_old)}</p>
             </div>
             <div className="action">
-              <Button size="lg" variant="secondary" onClick={handleAddProduct}>
+              <Button
+                size="lg"
+                variant="secondary"
+                onClick={handleAddProductToCart}
+              >
                 Thêm vào giỏ hàng
               </Button>
               <Button size="lg" variant="danger" onClick={handleBuyNow}>

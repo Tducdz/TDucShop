@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import CardProduct from "./card.product";
 import { getToken, getUser } from "@/utils/auth";
-import "@/styles/user.cart.scss";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import "@/styles/user.cart.scss";
 
 interface CartItem {
   cart_id: number;
@@ -28,19 +29,23 @@ const UserCart = () => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [totalMoney, setTotalMoney] = useState<number>(0);
+  const [showModalOrder, setShowModalOrder] = useState<boolean>(false);
+
+  // order infor
+  const [orderName, setOrderName] = useState<string>("");
+  const [orderPhone, setOrderPhone] = useState<string>("");
+  const [orderAddress, setOrderAddress] = useState<string>("");
 
   const updateAuth = () => {
     setToken(getToken());
     setUser(getUser());
   };
 
-  useEffect(() => {
-    updateAuth();
-    window.addEventListener("authChange", updateAuth);
-    return () => {
-      window.removeEventListener("authChange", updateAuth);
-    };
-  }, []);
+  const formatPrice = (price: number | string) => {
+    const priceInt = Number(price);
+    return priceInt.toLocaleString("vi-VN") + "₫";
+  };
 
   const fetchListCard = async (user: User | null, token: string | null) => {
     if (!user?.id || !token) {
@@ -59,7 +64,7 @@ const UserCart = () => {
       const formatRes = await res.json();
       setCart(formatRes.data);
     } else {
-      toast.error("Lỗi khi lấy dữ liệu");
+      toast.error("Lỗi khi lấy dữ liệu, hãy thử đăng nhập lại");
     }
   };
 
@@ -82,14 +87,66 @@ const UserCart = () => {
   };
 
   useEffect(() => {
+    updateAuth();
+    window.addEventListener("authChange", updateAuth);
+    return () => {
+      window.removeEventListener("authChange", updateAuth);
+    };
+  }, []);
+
+  useEffect(() => {
     fetchListCard(user, token);
   }, [user, token]);
+
+  useEffect(() => {
+    const total = cart.reduce((sum, item) => {
+      return sum + Number(item.price) * item.quantity;
+    }, 0);
+    setTotalMoney(total);
+  }, [cart]);
+
+  const handleClickOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!user || !token) {
+      toast.error("Bạn chưa đăng nhập");
+      return;
+    }
+
+    setShowModalOrder(true);
+  };
+
+  const handleConfirmOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch(`http://localhost:8080/order`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user_id: user?.id,
+        payment_method: "COD",
+        shipping_address: `${orderName} || ${orderPhone} || ${orderAddress}`,
+      }),
+    });
+
+    if (res.ok) {
+      toast.success("Đặt hàng thành công!");
+    } else {
+      toast.error("Lỗi đặt hàng, hãy thử đăng nhập lại");
+    }
+  };
+
+  const handleCloseBtn = () => {
+    setShowModalOrder(false);
+  };
 
   return (
     <div className="container user-cart-container">
       <div className="title">Giỏ hàng của bạn</div>
       <div className="cart-content">
-        <div className="products">
+        <div className="products mb-4">
           {cart.length > 0 ? (
             cart.map((item) => {
               return (
@@ -105,21 +162,46 @@ const UserCart = () => {
           )}
         </div>
         <div className="user-infor">
-          <Form>
+          <Form onSubmit={handleClickOrder}>
             <Form.Group className="mb-3" controlId="formBasicName">
               <Form.Label>Tên người nhận</Form.Label>
-              <Form.Control type="text" placeholder="..." />
+              <Form.Control
+                required
+                type="text"
+                placeholder="..."
+                value={orderName}
+                onChange={(event) => setOrderName(event.target.value)}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPhone">
               <Form.Label>Số điện thoại</Form.Label>
-              <Form.Control type="text" placeholder="..." />
+              <Form.Control
+                required
+                type="text"
+                placeholder="..."
+                value={orderPhone}
+                onChange={(event) => setOrderPhone(event.target.value)}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicAddress">
               <Form.Label>Địa chỉ giao hàng</Form.Label>
-              <Form.Control type="text" placeholder="..." />
+              <Form.Control
+                required
+                type="text"
+                placeholder="..."
+                value={orderAddress}
+                onChange={(event) => setOrderAddress(event.target.value)}
+              />
             </Form.Group>
+
+            <Form.Control
+              className="mb-3"
+              type="text"
+              placeholder={`Tạm tính: ${formatPrice(totalMoney)}`}
+              disabled
+            />
 
             <Button
               variant="outline-danger"
@@ -131,6 +213,47 @@ const UserCart = () => {
           </Form>
         </div>
       </div>
+      <Modal
+        show={showModalOrder}
+        onHide={handleCloseBtn}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="login-title">Xác nhận đặt hàng</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleConfirmOrder}>
+            <div className="title-order">Đơn hàng của bạn bao gồm: </div>
+            {cart &&
+              cart.length > 0 &&
+              cart.map((item) => {
+                return (
+                  <div key={item.product_id}>
+                    <b>{item.name}</b> (SL: {item.quantity})
+                  </div>
+                );
+              })}
+            <div>
+              Bạn cần thanh toán:{" "}
+              <b style={{ color: "red" }}>{formatPrice(totalMoney)}</b>
+            </div>
+            <div className="mb-2">
+              <i style={{ fontSize: "12px" }}>
+                Hãy kiểm tra kỹ thông tin liên hệ trước khi đặt hàng!
+              </i>
+            </div>
+            <div className="action-form">
+              <Button variant="outline-danger" type="submit">
+                Đặt hàng
+              </Button>
+              <Button variant="secondary" onClick={handleCloseBtn}>
+                Hủy
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

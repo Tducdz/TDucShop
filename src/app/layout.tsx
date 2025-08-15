@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import AppHeader from "@/components/app.header";
 import AppFooter from "@/components/app.footer";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "@/app/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/homepage.scss";

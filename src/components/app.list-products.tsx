@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import CardProduct from "./card.product";
 import Button from "react-bootstrap/Button";
+import { useSearchParams } from "next/navigation";
 
 export interface Product {
   id: number;
@@ -28,6 +29,9 @@ const ListProducts = () => {
   const [listProduct, setListProduct] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [showBtn, setShowBtn] = useState<boolean>(true);
+
+  const searchParams = useSearchParams();
+  const q = searchParams.get("q");
 
   const fetchListProduct = async () => {
     const res = await fetch(`http://localhost:8080/product/list`);
@@ -58,6 +62,24 @@ const ListProducts = () => {
       setShowBtn(false);
     }
   };
+
+  const handleSearch = async () => {
+    if (q) {
+      const res = await fetch(
+        `http://localhost:8080/product/search?keyword=${q}`
+      );
+      const jsonRes = await res.json();
+      if (jsonRes && jsonRes.data) {
+        setListProduct(jsonRes.data);
+      }
+    } else {
+      fetchListProduct();
+    }
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [q]);
 
   return (
     <div className="container">
