@@ -98,6 +98,11 @@ const AppHeader = () => {
                     <Link href="/" className="dropdown-item">
                       Tài khoản
                     </Link>
+                    {user?.role === "admin" && (
+                      <Link href="/admin" className="dropdown-item">
+                        Trang quản trị
+                      </Link>
+                    )}
                     <NavDropdown.Divider />
                     <span
                       className="dropdown-item btn"

@@ -133,6 +133,11 @@ const UserCart = () => {
 
     if (res.ok) {
       toast.success("Đặt hàng thành công!");
+      setShowModalOrder(false);
+      fetchListCard(user, token);
+      setOrderName("");
+      setOrderPhone("");
+      setOrderAddress("");
     } else {
       toast.error("Lỗi đặt hàng, hãy thử đăng nhập lại");
     }
