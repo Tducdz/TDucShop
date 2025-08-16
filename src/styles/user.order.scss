@@ -1,0 +1,17 @@
+.user-order-container {
+  min-height: calc(100vh - 96px);
+
+  .title {
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .list-order {
+    tr {
+      th,
+      td {
+        text-align: center;
+      }
+    }
+  }
+}

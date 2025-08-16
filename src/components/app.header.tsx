@@ -87,7 +87,7 @@ const AppHeader = () => {
                 </Button>
               </Form>
               <Nav className="ms-auto">
-                <Link href="/" className="nav-link">
+                <Link href="/order" className="nav-link">
                   Tra cứu đơn hàng
                 </Link>
                 <Link href="/cart" className="nav-link">
