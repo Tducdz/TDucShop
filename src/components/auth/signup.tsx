@@ -16,9 +16,23 @@ const SignupForm = ({ showModalSignup, handleClose }: SignupFormProps) => {
   const [password, setPassword] = useState<string>("");
   const [rePassword, setRePassword] = useState<string>("");
 
+  const validatePassword = (password: string) => {
+    if (!password.trim()) {
+      return "Mật khẩu không được chỉ chứa khoảng trắng";
+    }
+    return null;
+  };
+
   const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!rePassword || rePassword !== password) {
+
+    const error = validatePassword(password);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    if (rePassword !== password) {
       toast.error("Mật khẩu không khớp");
       return;
     }

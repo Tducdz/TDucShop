@@ -95,7 +95,7 @@ const AppHeader = () => {
                 </Link>
                 {isLoggedIn() ? (
                   <NavDropdown title={user?.name} id="basic-nav-dropdown">
-                    <Link href="/" className="dropdown-item">
+                    <Link href="/account" className="dropdown-item">
                       Tài khoản
                     </Link>
                     {user?.role === "admin" && (
