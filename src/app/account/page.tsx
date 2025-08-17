@@ -206,7 +206,11 @@ const UserAccount = () => {
                       />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit" className="mt-2">
+                    <Button
+                      variant="outline-primary"
+                      type="submit"
+                      className="mt-2"
+                    >
                       Lưu thay đổi
                     </Button>
                   </Form>
@@ -260,7 +264,11 @@ const UserAccount = () => {
                       />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit" className="mt-2">
+                    <Button
+                      variant="outline-primary"
+                      type="submit"
+                      className="mt-2"
+                    >
                       Đổi mật khẩu
                     </Button>
                   </Form>

@@ -66,7 +66,7 @@ const AppHeader = () => {
   return (
     <>
       <div className="header-container">
-        <div className="fhfhfhfh">
+        <div>
           <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
               <Link href="/" className="navbar-brand">
