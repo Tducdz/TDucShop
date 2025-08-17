@@ -66,71 +66,73 @@ const AppHeader = () => {
   return (
     <>
       <div className="header-container">
-        <Navbar expand="lg" className="bg-body-tertiary">
-          <Container>
-            <Link href="/" className="navbar-brand">
-              TDucShop
-            </Link>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Form className="d-flex mx-auto" onSubmit={handleSearch}>
-                <Form.Control
-                  type="search"
-                  placeholder="Tìm kiếm"
-                  className="me-2"
-                  aria-label="Search"
-                  value={searchText || ""}
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
-                <Button variant="outline-danger" type="submit">
-                  <CiSearch style={{ marginBottom: "3px" }} />
-                </Button>
-              </Form>
-              <Nav className="ms-auto">
-                <Link href="/order" className="nav-link">
-                  Tra cứu đơn hàng
-                </Link>
-                <Link href="/cart" className="nav-link">
-                  Giỏ hàng
-                </Link>
-                {isLoggedIn() ? (
-                  <NavDropdown title={user?.name} id="basic-nav-dropdown">
-                    <Link href="/account" className="dropdown-item">
-                      Tài khoản
-                    </Link>
-                    {user?.role === "admin" && (
-                      <Link href="/admin" className="dropdown-item">
-                        Trang quản trị
+        <div className="fhfhfhfh">
+          <Navbar expand="lg" className="bg-body-tertiary">
+            <Container>
+              <Link href="/" className="navbar-brand">
+                TDucShop
+              </Link>
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse id="basic-navbar-nav">
+                <Form className="d-flex mx-auto" onSubmit={handleSearch}>
+                  <Form.Control
+                    type="search"
+                    placeholder="Tìm kiếm"
+                    className="me-2"
+                    aria-label="Search"
+                    value={searchText || ""}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                  <Button variant="outline-danger" type="submit">
+                    <CiSearch style={{ marginBottom: "3px" }} />
+                  </Button>
+                </Form>
+                <Nav className="ms-auto">
+                  <Link href="/order" className="nav-link">
+                    Tra cứu đơn hàng
+                  </Link>
+                  <Link href="/cart" className="nav-link">
+                    Giỏ hàng
+                  </Link>
+                  {isLoggedIn() ? (
+                    <NavDropdown title={user?.name} id="basic-nav-dropdown">
+                      <Link href="/account" className="dropdown-item">
+                        Tài khoản
                       </Link>
-                    )}
-                    <NavDropdown.Divider />
-                    <span
-                      className="dropdown-item btn"
-                      onClick={() => handleLogout()}
-                    >
-                      Đăng xuất
-                    </span>
-                  </NavDropdown>
-                ) : (
-                  <div className="not-logged-in">
-                    <Button
-                      variant="outline-primary"
-                      onClick={() => setShowModalLogin(true)}
-                    >
-                      Đăng nhập
-                    </Button>
-                    <Button
-                      variant="outline-dark"
-                      onClick={() => setShowModalSignup(true)}
-                    >
-                      Đăng ký
-                    </Button>
-                  </div>
-                )}
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
+                      {user?.role === "admin" && (
+                        <Link href="/admin" className="dropdown-item">
+                          Trang quản trị
+                        </Link>
+                      )}
+                      <NavDropdown.Divider />
+                      <span
+                        className="dropdown-item btn"
+                        onClick={() => handleLogout()}
+                      >
+                        Đăng xuất
+                      </span>
+                    </NavDropdown>
+                  ) : (
+                    <div className="not-logged-in">
+                      <Button
+                        variant="outline-primary"
+                        onClick={() => setShowModalLogin(true)}
+                      >
+                        Đăng nhập
+                      </Button>
+                      <Button
+                        variant="outline-dark"
+                        onClick={() => setShowModalSignup(true)}
+                      >
+                        Đăng ký
+                      </Button>
+                    </div>
+                  )}
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+        </div>
       </div>
       <LoginForm
         showModalLogin={showModalLogin}

@@ -72,6 +72,8 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
+  const [writeComment, setWriteComment] = useState("");
+
   const updateAuth = () => {
     setToken(getToken());
     setUser(getUser());
@@ -137,6 +139,37 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   };
 
+  const handleComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!user || !token) {
+      toast.error("Bạn chưa đăng nhập");
+      return;
+    }
+
+    const res = await fetch(`http://localhost:8080/review`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user_id: user.id,
+        product_id: id,
+        comment: writeComment,
+      }),
+    });
+
+    const jsonRes = await res.json();
+
+    if (res.ok) {
+      toast.success(jsonRes.message);
+      setWriteComment("");
+    } else {
+      toast.error(jsonRes.message);
+    }
+  };
+
   return (
     <>
       <div className="product-detail-container container">
@@ -193,17 +226,23 @@ const ProductDetail = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
       </div>
       <div className="comment-container container">
-        <Form.Label
-          htmlFor="comment 
-        "
-        >
-          Đánh giá:
-        </Form.Label>
-        <Form.Control id="comment" type="text" aria-describedby="comment" />
-        <Form.Text id="passwordHelpBlock" muted>
-          Khách hàng đã mua hàng mới có thể gửi đánh giá
-        </Form.Text>
-        <Button className="btn-submit">Gửi đánh giá</Button>
+        <Form onSubmit={handleComment}>
+          <Form.Label htmlFor="comment">Đánh giá:</Form.Label>
+          <Form.Control
+            id="comment"
+            type="text"
+            aria-describedby="comment"
+            value={writeComment}
+            onChange={(event) => setWriteComment(event.target.value)}
+            required
+          />
+          <Form.Text id="passwordHelpBlock" muted>
+            Khách hàng đã mua hàng mới có thể gửi đánh giá
+          </Form.Text>
+          <Button className="btn-submit" type="submit">
+            Gửi đánh giá
+          </Button>
+        </Form>
         {comments && comments.length > 0 && (
           <div className="list-comments">
             {comments.map((item, index) => (
