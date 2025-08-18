@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 const getComments = (req, res) => {
   let page = parseInt(req.query.page) || 1;
-  let limit = parseInt(req.query.limit) || 10;
+  let limit = parseInt(req.query.limit) || 7;
   let offset = (page - 1) * limit;
 
   const countQuery = `
