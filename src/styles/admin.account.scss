@@ -1,0 +1,48 @@
+.admin-account-container {
+  .title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 12px;
+
+    .page-control {
+      float: right;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #f0f0f0;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 16px;
+
+      span {
+        min-width: 24px;
+        text-align: center;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        color: #555;
+        transition: color 0.2s, transform 0.2s;
+
+        &:hover {
+          color: #007bff;
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+
+  th,
+  td {
+    text-align: center;
+  }
+
+  .action {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+}

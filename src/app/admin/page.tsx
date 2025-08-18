@@ -10,6 +10,10 @@ import { getToken, getUser } from "@/utils/auth";
 import { useRouter } from "next/navigation";
 import "@/styles/admin.home.scss";
 
+import AdminOrder from "@/components/admin/admin.order";
+import AdminComment from "@/components/admin/admin.comment";
+import AdminAccount from "@/components/admin/admin.account";
+
 interface User {
   id: number;
   name: string;
@@ -76,9 +80,15 @@ const AdminPage = () => {
               <Tab.Pane eventKey="second">
                 <AdminProducts token={token as string} />
               </Tab.Pane>
-              <Tab.Pane eventKey="third">Second tab content</Tab.Pane>
-              <Tab.Pane eventKey="fourth">Second tab content</Tab.Pane>
-              <Tab.Pane eventKey="fifth">Second tab content</Tab.Pane>
+              <Tab.Pane eventKey="third">
+                <AdminAccount token={token as string} />
+              </Tab.Pane>
+              <Tab.Pane eventKey="fourth">
+                <AdminOrder token={token as string} />
+              </Tab.Pane>
+              <Tab.Pane eventKey="fifth">
+                <AdminComment token={token as string} />
+              </Tab.Pane>
             </Tab.Content>
           </Col>
         </Row>
