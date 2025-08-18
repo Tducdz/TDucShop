@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 const getPageProducts = (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = 10;
+  const limit = 6;
   const offset = (page - 1) * limit;
 
   const sql = "SELECT * FROM Products ORDER BY id LIMIT ? OFFSET ?";
@@ -80,6 +80,7 @@ const searchProducts = (req, res) => {
 
 const updateProduct = (req, res) => {
   const productId = req.params.id;
+
   const {
     category_id,
     name,
@@ -97,6 +98,11 @@ const updateProduct = (req, res) => {
     water_resistant,
     stock,
   } = req.body;
+
+  // Validate cơ bản (tùy chỉnh theo yêu cầu)
+  if (!name || !price || !category_id) {
+    return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
+  }
 
   // Nếu FE gửi ảnh mới
   const image_url = req.file ? req.file.filename : req.body.image_url;
@@ -127,13 +133,16 @@ const updateProduct = (req, res) => {
       water_resistant,
       stock,
       image_url,
-      productId,
+      productId, // id lấy từ URL
     ],
     (err, result) => {
-      if (err)
+      if (err) {
+        console.error(err);
         return res.status(500).json({ message: "Lỗi khi cập nhật sản phẩm" });
-      if (result.affectedRows === 0)
+      }
+      if (result.affectedRows === 0) {
         return res.status(404).json({ message: "Sản phẩm không tồn tại" });
+      }
       res.status(200).json({ message: "Cập nhật sản phẩm thành công" });
     }
   );

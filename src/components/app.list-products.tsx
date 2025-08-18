@@ -5,7 +5,7 @@ import CardProduct from "./card.product";
 import Button from "react-bootstrap/Button";
 import { useSearchParams } from "next/navigation";
 
-export interface Product {
+interface Product {
   id: number;
   category_id: number;
   name: string;
