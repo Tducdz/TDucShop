@@ -18,7 +18,8 @@ app.use(
 // config req.body
 app.use(express.json());
 app.use("/js", express.static(path.join(__dirname, "public/js")));
-app.use("/img", express.static(path.join(__dirname, "public/img")));
+app.use("/img", express.static(path.join(__dirname, "..", "public/img")));
+
 // app.use(express.urlencoded({ extended: true }));
 
 // frontend

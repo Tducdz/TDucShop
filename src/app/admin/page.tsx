@@ -3,10 +3,48 @@ import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
-import "@/styles/admin.home.scss";
 import DashBoard from "@/components/admin/admin.dashboard";
+import AdminProducts from "@/components/admin/admin.products";
+import { useEffect, useState } from "react";
+import { getToken, getUser } from "@/utils/auth";
+import { useRouter } from "next/navigation";
+import "@/styles/admin.home.scss";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
 
 const AdminPage = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [authLoaded, setAuthLoaded] = useState(false);
+
+  const router = useRouter();
+
+  const updateAuth = () => {
+    setToken(getToken());
+    setUser(getUser());
+    setAuthLoaded(true);
+  };
+
+  useEffect(() => {
+    updateAuth();
+    window.addEventListener("authChange", updateAuth);
+
+    return () => {
+      window.removeEventListener("authChange", updateAuth);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (authLoaded && (!user || !token)) {
+      router.push("/");
+    }
+  }, [authLoaded, user, token, router]);
+
   return (
     <>
       <Tab.Container id="left-tabs-example" defaultActiveKey="first">
@@ -33,9 +71,11 @@ const AdminPage = () => {
           <Col className="content">
             <Tab.Content>
               <Tab.Pane eventKey="first">
-                <DashBoard />
+                <DashBoard token={token as string} />
               </Tab.Pane>
-              <Tab.Pane eventKey="second">Second tab content</Tab.Pane>
+              <Tab.Pane eventKey="second">
+                <AdminProducts token={token as string} />
+              </Tab.Pane>
               <Tab.Pane eventKey="third">Second tab content</Tab.Pane>
               <Tab.Pane eventKey="fourth">Second tab content</Tab.Pane>
               <Tab.Pane eventKey="fifth">Second tab content</Tab.Pane>

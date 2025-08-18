@@ -1,15 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { getUser, getToken } from "@/utils/auth";
-import { useState } from "react";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-}
+import { useEffect, useState } from "react";
 
 interface DashBoardDetail {
   monthlyRevenue: number;
@@ -22,27 +13,11 @@ interface DashBoardDetail {
   };
 }
 
-const DashBoard = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+const DashBoard = ({ token }: { token: string }) => {
   const [dashboard, setDashboard] = useState<DashBoardDetail>();
 
-  const updateAuth = () => {
-    setToken(getToken());
-    setUser(getUser());
-  };
-
   useEffect(() => {
-    updateAuth();
-    window.addEventListener("authChange", updateAuth);
-
-    return () => {
-      window.removeEventListener("authChange", updateAuth);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!user || !token) {
+    if (!token) {
       return;
     }
 
@@ -60,7 +35,7 @@ const DashBoard = () => {
     };
 
     fetchAdminHome();
-  }, [user, token]);
+  }, [token]);
 
   const formatPrice = (price: number | string) => {
     const priceInt = Number(price);

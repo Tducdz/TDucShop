@@ -96,8 +96,10 @@ const updateProduct = (req, res) => {
     os,
     water_resistant,
     stock,
-    image_url,
   } = req.body;
+
+  // Nếu FE gửi ảnh mới
+  const image_url = req.file ? req.file.filename : req.body.image_url;
 
   const sql = `
     UPDATE Products
@@ -247,8 +249,6 @@ const addProduct = (req, res) => {
     );
   });
 };
-
-module.exports = { addProduct };
 
 const deleteProduct = (req, res) => {
   const productId = req.params.id;
