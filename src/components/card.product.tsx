@@ -1,10 +1,28 @@
-import { Product } from "./app.list-products";
 import Image from "next/image";
 import Link from "next/link";
 import "../styles/card.product.scss";
 
 interface CardProductProps {
   product: Product;
+}
+interface Product {
+  id: number;
+  category_id: number;
+  name: string;
+  price: number;
+  price_old: number;
+  screen_size: string;
+  screen_tech: string;
+  chipset: string;
+  nfc: boolean;
+  RAM: string;
+  ROM: string;
+  battery: string;
+  sim_slots: string;
+  os: string;
+  water_resistant: boolean;
+  stock: number;
+  image_url: string;
 }
 
 const CardProduct = ({ product }: CardProductProps) => {

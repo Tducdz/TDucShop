@@ -569,7 +569,7 @@ const AdminProducts = ({ token }: { token: string }) => {
                       </div>
                       <div className="btn-delete">
                         <Button
-                          variant="outline-danger"
+                          variant="danger"
                           onClick={() => {
                             setDeleteConfirm(true);
                             setIdItemOnDelete(item.id);

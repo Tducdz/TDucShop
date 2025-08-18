@@ -1,7 +1,7 @@
 const db = require("../config/db");
 
 const getAllOrders = (req, res) => {
-  let { page = 1, limit = 10 } = req.query;
+  let { page = 1, limit = 7 } = req.query;
   page = parseInt(page);
   limit = parseInt(limit);
   let offset = (page - 1) * limit;

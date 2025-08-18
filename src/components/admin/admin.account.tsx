@@ -136,7 +136,7 @@ const AdminAccount = ({ token }: { token: string }) => {
   return (
     <div className="admin-account-container container  mt-4">
       <div className="title">
-        <span>Chỉnh sửa sản phẩm</span>
+        <span>Danh sách tài khoản</span>
         <span className="page-control mb-2">
           {currentPage > 1 && (
             <TbPlayerTrackPrevFilled
